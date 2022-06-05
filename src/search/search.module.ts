@@ -1,10 +1,8 @@
-import {  Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { SpecialtyController } from './controllers/specialty.controller';
 import { UbicationController } from './controllers/ubication.controller';
 
 @Module({
-  controllers: [SpecialtyController, UbicationController]
+  controllers: [SpecialtyController, UbicationController],
 })
-export class SearchModule {
-    
-}
+export class SearchModule {}
