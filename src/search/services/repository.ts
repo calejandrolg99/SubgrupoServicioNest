@@ -1,3 +1,3 @@
-export interface Repository<C, L> {
-  findAll(context?: C): L[];
+export interface Repository<E, F> {
+  findAll(context?: E): F[];
 }
