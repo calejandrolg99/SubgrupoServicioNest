@@ -7,7 +7,7 @@ export class SearchController<E, F> {
 
   //Consultas
   @Get(':context?')
-  FindAll(@Param('context') Context: E): F[] {
+  Find(@Param('context') Context: E): F[] {
     return this.searchService.Search(Context);
   }
 }

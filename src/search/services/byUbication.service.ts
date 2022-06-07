@@ -8,8 +8,4 @@ export class ByUbication extends SearchService<string, string> {
       return ['busqueda general'];
     }
   }
-
-  createRepository() {
-    return 'a';
-  }
 }

@@ -1,13 +1,14 @@
-import { DBConnection } from 'src/db/db.connection';
 import { Mapper } from './mapper';
+import { PSQLConnection } from 'src/db/psql.connection';
 
-export class AllDoctorMapper extends Mapper<string, string> {
-  constructor(db: DBConnection) {
-    super(db);
+export class SpecialtyDoctorMapper extends Mapper<string, string> {
+  constructor() {
+    const database = new PSQLConnection();
+    database.connect();
+    super(database);
   }
-
   //Traer los doctores de la db segun especialidad dada: TERMINAR IMPLEMENTACION
-  findAll(context?: string): string[] {
-    return ['aaa'];
+  find(context?: string): string[] {
+    return ['especialidad'];
   }
 }
