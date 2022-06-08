@@ -15,7 +15,7 @@ export class DoctorMapper extends Mapper<string, string> {
     this.doctorRepo = doctorRepo;
   }
 
-  //Traer todos los doctores de la db: TERMINAR IMPLEMENTACION
+  //Traer todos los doctores de la db
   find(context?: string): any {
     if (context) {
       return this.doctorRepo
