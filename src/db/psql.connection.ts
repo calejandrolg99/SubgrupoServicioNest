@@ -1,4 +1,6 @@
 import { DBConnection } from './db.connection';
+import { TypeOrmModuleOptions } from '@nestjs/typeorm';
+import { DoctorEntity } from 'src/search/entities/doctor.entity';
 
 export class PSQLConnection implements DBConnection {
   private host: string;
@@ -6,6 +8,7 @@ export class PSQLConnection implements DBConnection {
   private password: string;
   private database: string;
   private port: number;
+  private options: TypeOrmModuleOptions;
 
   public getHost(): string {
     return this.host;
@@ -27,6 +30,10 @@ export class PSQLConnection implements DBConnection {
     return this.port;
   }
 
+  getOptions(): TypeOrmModuleOptions {
+    return this.options;
+  }
+
   //DATOS PARA LA CONEXION A POSTGRESQL
   connect() {
     this.host = 'localhost';
@@ -34,5 +41,15 @@ export class PSQLConnection implements DBConnection {
     this.password = 'calejandrolg99';
     this.database = 'desarrollo';
     this.port = 5432;
+
+    this.options = {
+      type: 'postgres',
+      host: this.host,
+      username: this.name,
+      password: this.password,
+      database: this.database,
+      port: this.port,
+      entities: [DoctorEntity],
+    };
   }
 }

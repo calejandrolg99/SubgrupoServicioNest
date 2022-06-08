@@ -11,9 +11,6 @@ export class DoctorEntity extends BaseEntity {
   @Column({ nullable: true })
   last_name: string;
 
-  @Column({ type: 'bytea', nullable: true })
-  photo: any;
-
   @Column({ nullable: true })
   gender: string;
 }

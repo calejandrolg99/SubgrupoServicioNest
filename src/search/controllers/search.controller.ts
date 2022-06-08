@@ -3,7 +3,7 @@ import { SearchService } from '../services/search.service';
 
 @Controller('search')
 export class SearchController<E, F> {
-  protected searchService: SearchService<E, F>;
+  constructor(protected searchService: SearchService<E, F>) {}
 
   //Consultas
   @Get(':context?')

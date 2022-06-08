@@ -1,7 +1,12 @@
 import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { SearchModule } from './search/search.module';
+import { PSQLConnection } from './db/psql.connection';
+
+const psql = new PSQLConnection();
+psql.connect();
 
 @Module({
-  imports: [SearchModule],
+  imports: [SearchModule, TypeOrmModule.forRoot(psql.getOptions())],
 })
 export class AppModule {}

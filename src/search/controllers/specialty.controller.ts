@@ -4,8 +4,7 @@ import { SearchController } from './search.controller';
 
 @Controller('search/spe')
 export class SpecialtyController extends SearchController<string, string> {
-  constructor() {
-    super();
-    this.searchService = new BySpecialty();
+  constructor(private bySpecialty: BySpecialty) {
+    super(bySpecialty);
   }
 }

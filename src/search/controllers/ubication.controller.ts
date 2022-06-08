@@ -4,8 +4,7 @@ import { SearchController } from './search.controller';
 
 @Controller('search/ubi')
 export class UbicationController extends SearchController<string, string> {
-  constructor() {
-    super();
-    this.searchService = new ByUbication();
+  constructor(private byUbication: ByUbication) {
+    super(byUbication);
   }
 }
