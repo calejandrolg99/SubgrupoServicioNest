@@ -1,6 +1,8 @@
 import { DBConnection } from './db.connection';
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { DoctorEntity } from 'src/search/entities/doctor.entity';
+import { SpecialtyEntity } from 'src/search/entities/specialty.entity';
+import { DoctorSpecialtyEntity } from 'src/search/entities/doctorSpecialty.entity';
 
 export class PSQLConnection implements DBConnection {
   private host: string;
@@ -49,7 +51,7 @@ export class PSQLConnection implements DBConnection {
       password: this.password,
       database: this.database,
       port: this.port,
-      entities: [DoctorEntity],
+      entities: [DoctorEntity, SpecialtyEntity, DoctorSpecialtyEntity],
     };
   }
 }

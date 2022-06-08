@@ -2,6 +2,8 @@ import { Mapper } from './mapper';
 import { PSQLConnection } from 'src/db/psql.connection';
 import { Repository } from 'typeorm';
 import { DoctorEntity } from '../entities/doctor.entity';
+import { SpecialtyEntity } from '../entities/specialty.entity';
+import { DoctorSpecialtyEntity } from '../entities/doctorSpecialty.entity';
 
 export class DoctorMapper extends Mapper<string, string> {
   doctorRepo: Repository<DoctorEntity>;
@@ -15,6 +17,44 @@ export class DoctorMapper extends Mapper<string, string> {
 
   //Traer todos los doctores de la db: TERMINAR IMPLEMENTACION
   find(context?: string): any {
-    return this.doctorRepo.find();
+    if (context) {
+      return this.doctorRepo
+        .createQueryBuilder('doctor')
+        .select('doctor.id')
+        .addSelect('doctor.first_name')
+        .addSelect('doctor.last_name')
+        .addSelect('doctor.gender')
+        .addSelect('specialty.name', 'specialty')
+        .innerJoin(
+          DoctorSpecialtyEntity,
+          'doctor_specialty',
+          'doctor.id=doctor_specialty.id_doctor',
+        )
+        .innerJoin(
+          SpecialtyEntity,
+          'specialty',
+          'specialty.id=doctor_specialty.id_specialty',
+        )
+        .where('specialty.name=:specialty_name', { specialty_name: context })
+        .getRawMany();
+    } else
+      return this.doctorRepo
+        .createQueryBuilder('doctor')
+        .select('doctor.id')
+        .addSelect('doctor.first_name')
+        .addSelect('doctor.last_name')
+        .addSelect('doctor.gender')
+        .addSelect('specialty.name', 'specialty')
+        .innerJoin(
+          DoctorSpecialtyEntity,
+          'doctor_specialty',
+          'doctor.id=doctor_specialty.id_doctor',
+        )
+        .innerJoin(
+          SpecialtyEntity,
+          'specialty',
+          'specialty.id=doctor_specialty.id_specialty',
+        )
+        .getRawMany();
   }
 }
