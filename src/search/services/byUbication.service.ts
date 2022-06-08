@@ -1,17 +1,13 @@
-import { SearchService } from "./search.service";
+import { Injectable } from '@nestjs/common';
+import { SearchService } from './search.service';
 
-
-export class ByUbication extends SearchService<string,string> {
-
-    Search(context?: string): string[] {
-        if (context) {
-            return ['busqueda por ubicacion']
-        }
-        else{
-            return ['busqueda general']
-        }
+@Injectable()
+export class ByUbication extends SearchService<string, string> {
+  Search(context?: string): string[] {
+    if (context) {
+      return ['busqueda por ubicacion'];
+    } else {
+      return ['busqueda general'];
     }
-    
-
-
+  }
 }
