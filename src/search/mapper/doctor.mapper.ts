@@ -4,11 +4,15 @@ import { Repository } from 'typeorm';
 import { DoctorEntity } from '../entities/doctor.entity';
 import { SpecialtyEntity } from '../entities/specialty.entity';
 import { DoctorSpecialtyEntity } from '../entities/doctorSpecialty.entity';
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 
+@Injectable()
 export class DoctorMapper extends Mapper<string, string> {
-  doctorRepo: Repository<DoctorEntity>;
-
-  constructor(doctorRepo: Repository<DoctorEntity>) {
+  constructor(
+    @InjectRepository(DoctorEntity)
+    private doctorRepo: Repository<DoctorEntity>,
+  ) {
     const database = new PSQLConnection();
     database.connect();
     super(database);
