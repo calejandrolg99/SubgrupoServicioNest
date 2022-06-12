@@ -1,5 +1,5 @@
 import { Repository } from 'typeorm';
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DoctorEntity } from '../entities/doctor.entity';
 import { SpecialtyEntity } from '../entities/specialty.entity';
@@ -9,6 +9,8 @@ import { PSQLConnection } from 'src/dataAccess/db/psql.connection';
 
 @Injectable()
 export class DoctorMapper extends Mapper<string, Promise<any[]>> {
+  private logger: Logger = new Logger();
+
   constructor(
     @InjectRepository(DoctorEntity)
     private doctorRepo: Repository<DoctorEntity>,
@@ -22,6 +24,7 @@ export class DoctorMapper extends Mapper<string, Promise<any[]>> {
   //Traer todos los doctores de la db
   find(context?: string): Promise<any[]> {
     let response: Promise<any[]>;
+    let data: Promise<any[]>;
     if (context) {
       response = this.doctorRepo
         .createQueryBuilder('doctor')
@@ -29,6 +32,7 @@ export class DoctorMapper extends Mapper<string, Promise<any[]>> {
         .addSelect('doctor.first_name')
         .addSelect('doctor.last_name')
         .addSelect('doctor.gender')
+        .addSelect('doctor.photo')
         .addSelect('specialty.name', 'specialty')
         .innerJoin(
           DoctorSpecialtyEntity,
@@ -42,7 +46,8 @@ export class DoctorMapper extends Mapper<string, Promise<any[]>> {
         )
         .where('specialty.name=:specialty_name', { specialty_name: context })
         .getRawMany();
-      return response;
+      data = this.convert(response);
+      return data;
     } else {
       response = this.doctorRepo
         .createQueryBuilder('doctor')
@@ -50,6 +55,7 @@ export class DoctorMapper extends Mapper<string, Promise<any[]>> {
         .addSelect('doctor.first_name')
         .addSelect('doctor.last_name')
         .addSelect('doctor.gender')
+        .addSelect('doctor.photo')
         .addSelect('specialty.name', 'specialty')
         .innerJoin(
           DoctorSpecialtyEntity,
@@ -62,7 +68,51 @@ export class DoctorMapper extends Mapper<string, Promise<any[]>> {
           'specialty.id=doctor_specialty.id_specialty',
         )
         .getRawMany();
-      return response;
+      data = this.convert(response);
+      return data;
     }
+  }
+
+  async convert(data: Promise<any[]>): Promise<any[]> {
+    let doctorList: any[];
+    await data.then((d) => {
+      const doctors: any[] = [];
+      for (let i = 0; i < d.length; i++) {
+        const doctor = d[i];
+        const specialties = this.getDoctorSpecialties(doctor.doctor_id, d);
+        const doc = {
+          name: doctor.doctor_first_name + ' ' + doctor.doctor_last_name,
+          gender: doctor.doctor_gender,
+          photo: doctor.doctor_photo,
+          specialty: specialties,
+        };
+        doctors.push(doc);
+      }
+      const doctorAux = doctors.filter(
+        (doctor, i, list) =>
+          i ==
+          list.findIndex(
+            (d) =>
+              d.name == doctor.name &&
+              d.gender == doctor.gender &&
+              d.photo == doctor.photo,
+          ),
+      );
+      doctorList = doctorAux;
+    });
+
+    return doctorList;
+  }
+
+  getDoctorSpecialties(id: string, doctors: any[]): string[] {
+    const specialties: string[] = [];
+    for (let i = 0; i < doctors.length; i++) {
+      const doctor = doctors[i];
+      if (id == doctor.doctor_id) {
+        const specialty = doctor.specialty;
+        specialties.push(specialty);
+      }
+    }
+    return specialties;
   }
 }

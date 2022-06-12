@@ -14,4 +14,7 @@ export class DoctorEntity extends BaseEntity {
 
   @Column()
   gender: Gender;
+
+  @Column()
+  photo: string;
 }
