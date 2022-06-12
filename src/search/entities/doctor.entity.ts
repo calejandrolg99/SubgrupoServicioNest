@@ -1,4 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from 'typeorm';
+import { Gender } from '../domainClass/enums';
 
 @Entity({ name: 'doctor' })
 export class DoctorEntity extends BaseEntity {
@@ -12,5 +13,5 @@ export class DoctorEntity extends BaseEntity {
   last_name: string;
 
   @Column()
-  gender: string;
+  gender: Gender;
 }
