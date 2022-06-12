@@ -9,8 +9,6 @@ import { PSQLConnection } from 'src/dataAccess/db/psql.connection';
 
 @Injectable()
 export class DoctorMapper extends Mapper<string, Promise<any[]>> {
-  private logger: Logger = new Logger();
-
   constructor(
     @InjectRepository(DoctorEntity)
     private doctorRepo: Repository<DoctorEntity>,
