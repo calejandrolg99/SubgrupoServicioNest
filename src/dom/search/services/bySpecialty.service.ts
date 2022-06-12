@@ -11,11 +11,11 @@ export class BySpecialty extends SearchService<string, Promise<any>> {
     super();
   }
 
-  Search(context?: string): Promise<any> {
+  async Search(context?: string): Promise<any> {
     if (context) {
-      return this.doctorMapper.find(context);
+      return await this.doctorMapper.find(context);
     } else {
-      return this.doctorMapper.find();
+      return await this.doctorMapper.find();
     }
   }
 }

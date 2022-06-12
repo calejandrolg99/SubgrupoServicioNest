@@ -1,3 +1,3 @@
 export interface DBConnection {
-  connect();
+  connect(): void;
 }
