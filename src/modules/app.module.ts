@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { SearchModule } from './search.module';
-import { PSQLConnection } from '../db/psql.connection';
+import { PSQLConnection } from '../dataAccess/db/psql.connection';
 
 const psql = new PSQLConnection();
 psql.connect();

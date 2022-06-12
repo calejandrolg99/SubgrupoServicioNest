@@ -1,9 +1,11 @@
+import { Injectable } from '@nestjs/common';
 import { SearchService } from './search.service';
-import { DoctorMapper } from '../mapper/doctor.mapper';
-import { forwardRef, Inject, Injectable } from '@nestjs/common';
+import { Inject } from '@nestjs/common';
+import { DoctorMapper } from '../../../dataAccess/mapper/doctor.mapper';
+import { forwardRef } from '@nestjs/common';
 
 @Injectable()
-export class BySpecialty extends SearchService<string, Promise<any>> {
+export class ByUbication extends SearchService<string, Promise<any>> {
   constructor(
     @Inject(forwardRef(() => DoctorMapper))
     private doctorMapper: DoctorMapper,

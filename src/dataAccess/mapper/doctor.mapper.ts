@@ -1,14 +1,14 @@
 import { Mapper } from './mapper';
-import { PSQLConnection } from 'src/db/psql.connection';
+import { PSQLConnection } from 'src/dataAccess/db/psql.connection';
 import { Repository } from 'typeorm';
 import { DoctorEntity } from '../entities/doctor.entity';
 import { SpecialtyEntity } from '../entities/specialty.entity';
 import { DoctorSpecialtyEntity } from '../entities/doctorSpecialty.entity';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Doctor } from '../domainClass/doctor';
-import { Specialty } from '../domainClass/specialty';
-import { MedicineSpecialties } from '../domainClass/enums';
+import { Doctor } from '../../dom/domainClass/doctor';
+import { Specialty } from '../../dom/domainClass/specialty';
+import { MedicineSpecialties } from '../../dom/domainClass/enums';
 
 @Injectable()
 export class DoctorMapper extends Mapper<

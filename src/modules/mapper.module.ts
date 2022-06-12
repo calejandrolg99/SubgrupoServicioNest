@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
-import { DoctorMapper } from 'src/search/mapper/doctor.mapper';
+import { DoctorMapper } from '../dataAccess/mapper/doctor.mapper';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { DoctorEntity } from 'src/search/entities/doctor.entity';
-import { SpecialtyEntity } from 'src/search/entities/specialty.entity';
-import { DoctorSpecialtyEntity } from 'src/search/entities/doctorSpecialty.entity';
+import { DoctorEntity } from '../dataAccess/entities/doctor.entity';
+import { SpecialtyEntity } from '../dataAccess/entities/specialty.entity';
+import { DoctorSpecialtyEntity } from '../dataAccess/entities/doctorSpecialty.entity';
 
 @Module({
   imports: [

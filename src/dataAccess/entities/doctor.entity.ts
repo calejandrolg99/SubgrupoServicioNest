@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from 'typeorm';
-import { Gender } from '../domainClass/enums';
+import { Gender } from '../../dom/domainClass/enums';
 
 @Entity({ name: 'doctor' })
 export class DoctorEntity extends BaseEntity {
