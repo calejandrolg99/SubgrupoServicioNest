@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 import { DoctorEntity } from '../entities/doctor.entity';
 import { SpecialtyEntity } from '../entities/specialty.entity';
 import { DoctorSpecialtyEntity } from '../entities/doctorSpecialty.entity';
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Doctor } from '../domainClass/doctor';
 import { Specialty } from '../domainClass/specialty';
@@ -13,12 +13,10 @@ import { MedicineSpecialties } from '../domainClass/enums';
 @Injectable()
 export class DoctorMapper extends Mapper<
   string,
-  Promise<any>,
-  Promise<any>,
-  Doctor<string>
+  Promise<DoctorEntity[]>,
+  DoctorEntity[],
+  Doctor<MedicineSpecialties>
 > {
-  private logger: Logger = new Logger();
-
   constructor(
     @InjectRepository(DoctorEntity)
     private doctorRepo: Repository<DoctorEntity>,
@@ -30,10 +28,10 @@ export class DoctorMapper extends Mapper<
   }
 
   //Traer todos los doctores de la db
-  find(context?: string): Promise<DoctorEntity> {
-    let response: Promise<any>;
+  async find(context?: string): Promise<DoctorEntity[]> {
+    let response: DoctorEntity[];
     if (context) {
-      response = this.doctorRepo
+      response = await this.doctorRepo
         .createQueryBuilder('doctor')
         .select('doctor.id')
         .addSelect('doctor.first_name')
@@ -54,7 +52,7 @@ export class DoctorMapper extends Mapper<
         .getRawMany();
       return response;
     } else {
-      response = this.doctorRepo
+      response = await this.doctorRepo
         .createQueryBuilder('doctor')
         .select('doctor.id')
         .addSelect('doctor.first_name')
@@ -77,30 +75,26 @@ export class DoctorMapper extends Mapper<
     }
   }
 
-  convert(data: Promise<any>): Doctor<string>[] {
+  convert(data: any[]): Doctor<MedicineSpecialties>[] {
     const doctorList: Doctor<MedicineSpecialties>[] = [];
-    data.then((doctors) => {
-      for (let i = 0; i < doctors.length; i++) {
-        const doctor = doctors[i];
-        const specialties = this.getDoctorSpecialties(
-          doctor.doctor_id,
-          doctors,
-        );
-        const d = new Doctor<MedicineSpecialties>(
-          doctor.doctor_first_name + ' ' + doctor.doctor_last_name,
-          doctor.doctor_gender,
-          'photo',
-          specialties,
-        );
-        doctorList.push(d);
-      }
-      this.logger.log(doctorList[0].getSpecialty());
-    });
+
+    for (let i = 0; i < data.length; i++) {
+      const doctor = data[i];
+      const specialties = this.getDoctorSpecialties(doctor.doctor_id, data);
+      const d = new Doctor<MedicineSpecialties>(
+        doctor.doctor_first_name + ' ' + doctor.doctor_last_name,
+        doctor.doctor_gender,
+        'photo',
+        specialties,
+      );
+      doctorList.push(d);
+    }
+
     return doctorList;
   }
 
   getDoctorSpecialties(
-    id: string,
+    id: number,
     doctors: any[],
   ): Specialty<MedicineSpecialties>[] {
     const specialties: Specialty<MedicineSpecialties>[] = [];
