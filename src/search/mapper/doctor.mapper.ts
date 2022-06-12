@@ -4,10 +4,11 @@ import { Repository } from 'typeorm';
 import { DoctorEntity } from '../entities/doctor.entity';
 import { SpecialtyEntity } from '../entities/specialty.entity';
 import { DoctorSpecialtyEntity } from '../entities/doctorSpecialty.entity';
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Doctor } from '../domainClass/doctor';
 import { Specialty } from '../domainClass/specialty';
+import { MedicineSpecialties } from '../domainClass/enums';
 
 @Injectable()
 export class DoctorMapper extends Mapper<
@@ -16,6 +17,8 @@ export class DoctorMapper extends Mapper<
   Promise<any>,
   Doctor<string>
 > {
+  private logger: Logger = new Logger();
+
   constructor(
     @InjectRepository(DoctorEntity)
     private doctorRepo: Repository<DoctorEntity>,
@@ -27,7 +30,7 @@ export class DoctorMapper extends Mapper<
   }
 
   //Traer todos los doctores de la db
-  find(context?: string): Promise<any> {
+  find(context?: string): Promise<DoctorEntity> {
     let response: Promise<any>;
     if (context) {
       response = this.doctorRepo
@@ -69,12 +72,13 @@ export class DoctorMapper extends Mapper<
           'specialty.id=doctor_specialty.id_specialty',
         )
         .getRawMany();
+      this.convert(response);
       return response;
     }
   }
 
   convert(data: Promise<any>): Doctor<string>[] {
-    const doctorList: Doctor<string>[] = [];
+    const doctorList: Doctor<MedicineSpecialties>[] = [];
     data.then((doctors) => {
       for (let i = 0; i < doctors.length; i++) {
         const doctor = doctors[i];
@@ -82,7 +86,7 @@ export class DoctorMapper extends Mapper<
           doctor.doctor_id,
           doctors,
         );
-        const d = new Doctor<string>(
+        const d = new Doctor<MedicineSpecialties>(
           doctor.doctor_first_name + ' ' + doctor.doctor_last_name,
           doctor.doctor_gender,
           'photo',
@@ -90,16 +94,20 @@ export class DoctorMapper extends Mapper<
         );
         doctorList.push(d);
       }
+      this.logger.log(doctorList[0].getSpecialty());
     });
     return doctorList;
   }
 
-  getDoctorSpecialties(id: string, doctors: any[]): Specialty<string>[] {
-    const specialties: Specialty<string>[] = [];
+  getDoctorSpecialties(
+    id: string,
+    doctors: any[],
+  ): Specialty<MedicineSpecialties>[] {
+    const specialties: Specialty<MedicineSpecialties>[] = [];
     for (let i = 0; i < doctors.length; i++) {
       const doctor = doctors[i];
       if (id == doctor.doctor_id) {
-        const specialty = new Specialty<string>(doctor.specialty);
+        const specialty = new Specialty<MedicineSpecialties>(doctor.specialty);
         specialties.push(specialty);
       }
     }

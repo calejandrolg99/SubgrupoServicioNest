@@ -1,7 +1,7 @@
 import { Repo } from '../services/repository';
 import { DBConnection } from '../../db/db.connection';
 
-export abstract class Mapper<E, F, D, L> implements Repo<E, F, D, L> {
+export abstract class Mapper<E, F, D, L> implements Repo<E, F> {
   protected database: DBConnection;
 
   constructor(database: DBConnection) {

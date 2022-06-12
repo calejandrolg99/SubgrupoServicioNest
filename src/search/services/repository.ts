@@ -1,4 +1,3 @@
-export interface Repo<E, F, D, L> {
+export interface Repo<E, F> {
   find(context?: E): F;
-  convert(data: D): L[];
 }
