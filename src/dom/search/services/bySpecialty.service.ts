@@ -4,18 +4,17 @@ import { forwardRef, Inject, Injectable } from '@nestjs/common';
 
 @Injectable()
 export class BySpecialty extends SearchService<string, Promise<any>> {
-  constructor(
-    @Inject(forwardRef(() => DoctorMapper))
-    private doctorMapper: DoctorMapper,
-  ) {
+
+  constructor(@Inject(forwardRef(() => DoctorMapper)) repo: DoctorMapper) {
     super();
+    this.repository = repo;
   }
 
   async Search(context?: string): Promise<any> {
     if (context) {
-      return await this.doctorMapper.find(context);
+      return await this.repository.find(context);
     } else {
-      return await this.doctorMapper.find();
+      return await this.repository.find();
     }
   }
 }

@@ -1,3 +1,3 @@
-export interface Repo<E, F> {
+export interface ConsultRepository<E, F> {
   find(context?: E): F;
 }
