@@ -16,6 +16,9 @@ Se finalizaron las búsquedas de los doctores a la base de datos, filtrando por 
 
 Se desacoplaron ciertas dependencias que creaban una diferencia entre el diagrama y código.
 
+#### "Busqueda de especialidades"
+
+Se implementó un controlador, un servicio y un mapper los cuales son capaces de extraer la lista de especialidades almacenadas en la base de datos.
 
 ### Commits relevantes: Jose Flores
 
