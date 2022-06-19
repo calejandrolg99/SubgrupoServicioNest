@@ -1,12 +1,13 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller } from '@nestjs/common';
 import { SpecialtyListService } from '../services/specialtyList.service';
+import { SearchController } from './search.controller';
 
-@Controller('specialties')
-export class SpecialtyListController {
-  constructor(private specialtyListService: SpecialtyListService) {}
-
-  @Get()
-  Find(): Promise<any> {
-    return this.specialtyListService.Search();
+@Controller('search/specialties')
+export class SpecialtyListController extends SearchController<
+  string,
+  Promise<any>
+> {
+  constructor(private specialtyListService: SpecialtyListService) {
+    super(specialtyListService);
   }
 }
